@@ -1,5 +1,5 @@
 import { module, test } from "qunit";
-import { click, visit, currentURL } from "@ember/test-helpers";
+import { click, find, visit, currentURL } from "@ember/test-helpers";
 import { setupApplicationTest } from "ember-qunit";
 
 module("Acceptance | super duper rental", (hooks) => {
@@ -35,6 +35,16 @@ module("Acceptance | super duper rental", (hooks) => {
     assert.dom("h1").containsText("Super Duper Rentals");
     assert.dom("h2").containsText("Grand Old Mansion");
     assert.dom(".rental.detailed").exists();
+    assert.dom(".share.button").hasText("Share on Twitter");
+
+    let button = find(".share.button");
+    let tweetURL = new URL(button.href);
+
+    assert.equal(tweetURL.host, "twitter.com");
+    assert.equal(
+      tweetURL.searchParams.get("url"),
+      `${window.location.origin}/rentals/grand-old-mansion`
+    );
   });
 
   // Test for the about page
